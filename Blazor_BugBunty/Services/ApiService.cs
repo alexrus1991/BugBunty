@@ -23,7 +23,7 @@ namespace Blazor_BugBunty.Services
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
                 return await _httpClient.GetStringAsync("https://localhost:7174/api/User/GetTokenInfo");
             }
-
+            //test
             return "Erreur d’authentification";
         }
     }
