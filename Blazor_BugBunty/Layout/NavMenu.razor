@@ -1,0 +1,90 @@
+﻿@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Blazor_BugBunty</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            </NavLink>
+        </div>
+    </nav>
+</div>
+ *@
+
+ <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">BugBunty_App</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="profil">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Profil
+            </NavLink>
+        </div> 
+        <div class="nav-item px-3">
+            <AuthorizeView>
+                <NotAuthorized>
+                    <button @onclick="LoginWithAzure" class="ms-login-button">
+                        <svg class="ms-logo" width="21" height="21" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="1" y="1" width="9" height="9" fill="#F25022" />
+                            <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
+                            <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
+                            <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
+                        </svg>
+                        <span>Sign in with Microsoft</span>
+                    </button>
+                </NotAuthorized>
+                <Authorized>
+                    <button @onclick="LogoutWithAzure" class="ms-logout-button">
+                        <svg class="ms-logo" width="21" height="21" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="1" y="1" width="9" height="9" fill="#F25022" />
+                            <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
+                            <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
+                            <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
+                        </svg>
+                        <span>Logout from Microsoft</span>
+                    </button>
+                </Authorized>
+
+            </AuthorizeView>
+        </div>
+    </nav>
+</div>
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
