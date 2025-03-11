@@ -25,13 +25,38 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAuthorization();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+.AddJwtBearer(options =>
+{
+    options.Authority = "https://login.microsoftonline.com/9c523e69-1868-4f28-826a-993ddf8f33a8/v2.0";
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
-        options.Authority = "https://login.microsoftonline.com/9c523e69-1868-4f28-826a-993ddf8f33a8/v2.0";
-        //options.Audience = "BugBunty_Api";
-        options.TokenValidationParameters.ValidateAudience = false;
-        options.TokenValidationParameters.ValidIssuer = $"https://sts.windows.net/9c523e69-1868-4f28-826a-993ddf8f33a8/";
-    });
+        ValidateAudience = false, // Désactive la validation de l'audience car l’API n'est pas enregistrée
+        ValidateIssuer = true, // Vérifie que le token vient bien d'Azure Entra ID
+        ValidIssuer = "https://login.microsoftonline.com/9c523e69-1868-4f28-826a-993ddf8f33a8/v2.0",
+        ValidateLifetime = true, // Vérifie l'expiration du token
+        ValidateIssuerSigningKey = true // Vérifie la signature du token
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"? Erreur d'authentification : {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            Console.WriteLine("? Challenge JWT échoué !");
+            return Task.CompletedTask;
+        }
+    };
+});
+//.AddJwtBearer(options =>
+//{
+//    options.Authority = "https://login.microsoftonline.com/9c523e69-1868-4f28-826a-993ddf8f33a8/v2.0";
+//    options.Audience = "API_CLIENT_ID";
+//    // options.TokenValidationParameters.ValidateAudience = false;
+//    options.TokenValidationParameters.ValidIssuer = $"https://sts.windows.net/9c523e69-1868-4f28-826a-993ddf8f33a8/";
+//});
 
 
 builder.Services.AddCors(opt =>

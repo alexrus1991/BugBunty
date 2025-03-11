@@ -20,6 +20,7 @@ namespace Blazor_BugBunty.Services
 
             if (tokenResult.TryGetToken(out var token))
             {
+                Console.WriteLine($"🔹 Token envoyé : {token.Value}");
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
                 return await _httpClient.GetStringAsync("https://localhost:7174/api/User/GetTokenInfo");
             }

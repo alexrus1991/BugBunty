@@ -20,6 +20,15 @@ namespace Blazor_BugBunty.Pages
             Infos = new List<string>();
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
+            if (user.Identity.IsAuthenticated)
+            {
+                Console.WriteLine("✅ Utilisateur connecté !");
+                Console.WriteLine($"👤 Nom : {user.Identity.Name}");
+            }
+            else
+            {
+                Console.WriteLine("❌ Utilisateur non authentifié !");
+            }
             foreach (var claims in user.Claims)
             {
                 Infos.Add($"{claims.Subject.Name} - {claims.Type} - {claims.Value}");
