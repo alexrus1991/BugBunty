@@ -33,6 +33,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters.ValidIssuer = $"https://sts.windows.net/9c523e69-1868-4f28-826a-993ddf8f33a8/";
     });
 
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins(new string[] { "https://localhost:7118" })
+        .WithHeaders(new string[] { "content-type" })
+        .WithMethods(new string[] { "GET", "POST" });
+    });
+
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,7 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

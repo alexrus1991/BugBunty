@@ -6,17 +6,11 @@ namespace Blazor_BugBunty.Pages
 {
     public partial class Profil : ComponentBase
     {
-        private readonly ApiService _apiService;
+        [Inject]
+        private  ApiService _apiService { get; set; }
 
-        public Profil(ApiService apiService)
-        {
-            _apiService = apiService;
-            
-        }
-        public Profil()
-        {
-            
-        }
+        
+
         List<string> Infos { get; set; }
         [Inject]
         private AuthenticationStateProvider AuthenticationStateProvider { get; set; }

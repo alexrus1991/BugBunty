@@ -29,6 +29,11 @@ namespace BugBunty_Api.Services.BLL.Services
             return _context.Users.FirstOrDefault(t => t.Id == id)!;
         }
 
+        public User GetUserByMail(string email)
+        {
+            return _context.Users.FirstOrDefault(t => t.Email == email)!;
+        }
+
         public void UpdateRoleUser(int id, Role role)
         {
             if(role != null)

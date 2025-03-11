@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace BugBunty_Api.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
