@@ -1,4 +1,5 @@
 ﻿using BugBunty_Api.DTO;
+using BugBunty_Api.Infrastucture.Authorisations;
 using BugBunty_Api.Infrastucture.Models.Domaine;
 using BugBunty_Api.Services.BLL.IServices;
 using Mapster;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace BugBunty_Api.Controllers
 {
@@ -22,20 +24,11 @@ namespace BugBunty_Api.Controllers
         }
 
         [HttpGet("GetTokenInfo")]
+        [AuthorizeScope("full")]
         public IActionResult GetTokenInfo()
         {
-            var token = HttpContext.Request.Headers["Authorization"].ToString();
-
-            if (string.IsNullOrEmpty(token))
-                return Unauthorized("Aucun token fourni");
-
-            // Supprimer "Bearer " du token
-            token = token.Replace("Bearer ", "");
-
-            // Lire le token JWT
-            var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
-
-            return Ok(new
+            User.FindFirst(c => c.Type == ClaimTypes.Name);
+            return Ok();/*new
             {
                 Message = "Token reçu et validé",
                 TokenInfo = new
@@ -45,7 +38,7 @@ namespace BugBunty_Api.Controllers
                     jwtToken.Subject,
                     jwtToken.ValidTo
                 }
-            });
+            });*/
         }
 
 

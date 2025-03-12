@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace Blazor_BugBunty.Services
 {
@@ -16,16 +17,8 @@ namespace Blazor_BugBunty.Services
 
         public async Task<string> GetDataFromApi()
         {
-            var tokenResult = await _tokenProvider.RequestAccessToken();
-
-            if (tokenResult.TryGetToken(out var token))
-            {
-                Console.WriteLine($"🔹 Token envoyé : {token.Value}");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
-                return await _httpClient.GetStringAsync("https://localhost:7174/api/User/GetTokenInfo");
-            }
-            //test
-            return "Erreur d’authentification";
+            return await _httpClient.GetFromJsonAsync<string>("User/GetTokenInfo");
+            
         }
     }
 }

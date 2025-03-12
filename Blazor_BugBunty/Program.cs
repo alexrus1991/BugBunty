@@ -9,9 +9,15 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped<ICustomHttpClient, CustomHttpClient>();
-//builder.Services.AddScoped<AuthenticationHeaderHandler>();
+//builder.Services.AddScoped<ICustomHttpClient, CustomHttpClient>();
+builder.Services.AddScoped<BugBountyAuthenticationHeaderHandler>();
 builder.Services.AddScoped<ApiService>();
+
+
+builder.Services.AddScoped(sp => new HttpClient(sp.GetRequiredService<BugBountyAuthenticationHeaderHandler>())
+{
+    BaseAddress = new Uri("https://localhost:7174/api/")
+});
 
 builder.Services.AddMsalAuthentication(options =>
 {
@@ -21,27 +27,10 @@ builder.Services.AddMsalAuthentication(options =>
     options.ProviderOptions.LoginMode = "redirect";
     options.ProviderOptions.Authentication.PostLogoutRedirectUri = "/";
 });
+builder.Services.AddCascadingAuthenticationState();
 
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri("https://localhost:7174/api/")
-});
 
-//builder.Services.AddHttpClient<ICustomHttpClient, CustomHttpClient>("WithTokenCall", client =>
-//{
-//    client.BaseAddress = new Uri("https://localhost:7174/api/");
-//    client.DefaultRequestHeaders.Add("Accept", "application/json");
-//}).AddHttpMessageHandler<AuthenticationHeaderHandler>();
 
-builder.Services.AddHttpClient("API", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7174/api/"); // URL de l'API .NET 8
-})
-.AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("API"));
-
-//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 await builder.Build().RunAsync();
 //localhost:7174
